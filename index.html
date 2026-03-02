@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Stamp Maker — Turn URLs into 3D Printable Stamps</title>
+    <meta name="description"
+        content="Generate 3D printable QR code stamps from any URL. Enter a link, preview the mirrored QR code, and download an OBJ file ready for your 3D printer.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <header>
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect x="2" y="2" width="10" height="10" rx="2" fill="url(#g1)" />
+                <rect x="20" y="2" width="10" height="10" rx="2" fill="url(#g1)" />
+                <rect x="2" y="20" width="10" height="10" rx="2" fill="url(#g1)" />
+                <rect x="14" y="14" width="4" height="4" rx="1" fill="url(#g1)" />
+                <rect x="22" y="22" width="4" height="4" rx="1" fill="url(#g1)" opacity="0.6" />
+                <rect x="14" y="22" width="4" height="4" rx="1" fill="url(#g1)" opacity="0.4" />
+                <defs>
+                    <linearGradient id="g1" x1="0" y1="0" x2="32" y2="32">
+                        <stop stop-color="#818cf8" />
+                        <stop offset="1" stop-color="#c084fc" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>QR Stamp Maker</span>
+        </div>
+        <a href="https://github.com" target="_blank" class="header-link">How it works</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Turn any link into a<br><span class="gradient-text">3D printable QR stamp</span></h1>
+            <p class="subtitle">Enter a URL, preview the mirrored QR code, and download a ready-to-print OBJ file. Ink
+                it, stamp it, done.</p>
+        </section>
+
+        <!-- Step 1: URL Input -->
+        <section class="card step-card" id="step1">
+            <div class="step-header">
+                <div class="step-badge">1</div>
+                <div>
+                    <h2>Enter your URL</h2>
+                    <p>Paste the website link you want to encode</p>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    <input type="url" id="urlInput" placeholder="https://example.com" autocomplete="off"
+                        spellcheck="false">
+                </div>
+                <button id="generateBtn" class="btn-primary">
+                    <span>Generate QR</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Step 2: QR Preview -->
+        <section class="card step-card hidden" id="step2">
+            <div class="step-header">
+                <div class="step-badge">2</div>
+                <div>
+                    <h2>Preview</h2>
+                    <p>Your QR code — normal view and mirrored (stamp face)</p>
+                </div>
+            </div>
+            <div class="preview-grid">
+                <div class="preview-box">
+                    <canvas id="qrNormal" width="280" height="280"></canvas>
+                    <span class="preview-label">Normal (scan view)</span>
+                </div>
+                <div class="preview-box">
+                    <canvas id="qrMirrored" width="280" height="280"></canvas>
+                    <span class="preview-label">Mirrored (stamp face)</span>
+                </div>
+            </div>
+            <div class="info-banner">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>The stamp face is automatically mirrored so that when you press it, the ink produces a scannable
+                    QR code.</span>
+            </div>
+        </section>
+
+        <!-- Step 2.5: 3D Preview -->
+        <section class="card step-card hidden" id="step3dPreview">
+            <div class="step-header">
+                <div class="step-badge">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+                        <path d="M12 12l8-4.5" />
+                        <path d="M12 12v9" />
+                        <path d="M12 12L4 7.5" />
+                    </svg>
+                </div>
+                <div>
+                    <h2>3D Preview</h2>
+                    <p>Click and drag to rotate — scroll to zoom</p>
+                </div>
+            </div>
+            <div class="preview-3d-wrapper">
+                <canvas id="preview3d"></canvas>
+                <div class="preview-3d-hint" id="preview3dHint">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 9l2-2 2 2" />
+                        <path d="M7 7v10" />
+                        <path d="M19 15l-2 2-2-2" />
+                        <path d="M17 17V7" />
+                        <path d="M9 5l2-2 2 2" />
+                        <path d="M11 3h0" />
+                    </svg>
+                    <span>Drag to rotate</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Stamp Settings -->
+        <section class="card step-card hidden" id="step3">
+            <div class="step-header">
+                <div class="step-badge">3</div>
+                <div>
+                    <h2>Stamp settings</h2>
+                    <p>Adjust size and thickness for your 3D print</p>
+                </div>
+            </div>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="stampSize">Stamp size</label>
+                    <div class="range-group">
+                        <input type="range" id="stampSize" min="20" max="80" value="40" step="1">
+                        <span class="range-value" id="stampSizeVal">40 mm</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="moduleHeight">QR module height</label>
+                    <div class="range-group">
+                        <input type="range" id="moduleHeight" min="0.5" max="4" value="1.5" step="0.1">
+                        <span class="range-value" id="moduleHeightVal">1.5 mm</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="baseHeight">Base thickness</label>
+                    <div class="range-group">
+                        <input type="range" id="baseHeight" min="1" max="8" value="3" step="0.5">
+                        <span class="range-value" id="baseHeightVal">3 mm</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="borderModules">Border (quiet zone)</label>
+                    <div class="range-group">
+                        <input type="range" id="borderModules" min="1" max="6" value="2" step="1">
+                        <span class="range-value" id="borderModulesVal">2 modules</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stamp-dimensions" id="stampDimensions"></div>
+            <button id="downloadBtn" class="btn-primary btn-download">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>Download OBJ File</span>
+            </button>
+            <button id="downloadStlBtn" class="btn-secondary btn-download" style="margin-top: 0.75rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>Download STL File</span>
+            </button>
+        </section>
+    </main>
+
+    <footer>
+        <p>QR Stamp Maker &mdash; Made for makers, printers &amp; stampers</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.170.0",
+            "three/addons/": "https://esm.sh/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
